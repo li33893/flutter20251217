@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 앱 이름 -->
+    <string name="app_name">My App</string>
+
+    <!-- Google Sign-In을 위한 Web Client ID -->
+    <string name="default_web_client_id">195651065702-fub1854raivn5bmt7mc8pkbjd87h3ani.apps.googleusercontent.com</string>
+</resources>
+
+
