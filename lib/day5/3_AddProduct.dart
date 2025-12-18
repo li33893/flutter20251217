@@ -3,13 +3,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';//让 Flutter 可以操作 Firestore 数据库
 import 'package:firebase_core/firebase_core.dart';//用来 初始化 Firebase
 import 'package:flutter/material.dart';//Flutter 的 UI 组件库（Scaffold / AppBar / TextField 等）
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../firebase_options.dart';//Firebase 自动生成的配置文件
 import '3_productList.dart';
 
 ///二、main 函数（整个程序的起点）
 void main() async {
-  await dotenv.load(fileName:'.env');
   WidgetsFlutterBinding.ensureInitialized();//告诉 Flutter：“我在 runApp 之前要干点系统级别的事情（比如 Firebase）”
   await Firebase.initializeApp(//await：等 Firebase 初始化完成;
     options: DefaultFirebaseOptions.currentPlatform, //options:使用你当前平台（Android / iOS / Web）的配置
@@ -40,7 +38,6 @@ class AddProduct extends StatefulWidget {//为什么是 StatefulWidget？有 输
 }
 
 class _AddProductState extends State<AddProduct> {
-
   ///五、状态变量（页面持有的数据）
   final FirebaseFirestore fs=FirebaseFirestore.instance;
 
@@ -54,9 +51,7 @@ class _AddProductState extends State<AddProduct> {
   void _productList() async {
 
     FirebaseFirestore fs = FirebaseFirestore.instance;
-    //.collection("product") 👉 product 表
     final snapshot = await fs.collection("product").get();
-    //snapshot.docs
     for (var doc in snapshot.docs) {
       Map<String, dynamic> data = doc.data();
       print("제품명: ${data["pName"]}, 가격: ${data["price"]}");
@@ -94,9 +89,6 @@ class _AddProductState extends State<AddProduct> {
     CollectionReference products = fs.collection("product");
 
     // 添加新产品
-    //向 product 集合新增一条文档
-    //每个 key 就是 Firestore 里的字段名
-    //createdAt 用的是服务器时间（推荐写法）
     await products.add({
       'pName': _pName.text,
       'price': _price.text,
@@ -113,7 +105,6 @@ class _AddProductState extends State<AddProduct> {
   Widget _listUser() {
     ///九、_listUser()（实时监听 Firestore）
     return StreamBuilder(
-    // .snapshots() 是实时监听
         stream: FirebaseFirestore.instance.collection("product").snapshots(), // 사용자 목록 스트림
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
           // 아직 데이터가 로드되지 않았을 경우 빈 리스트 반환
